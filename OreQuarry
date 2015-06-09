@@ -124,30 +124,34 @@ function gotoZ(newZ)
 	end	
 end
 
+function dropAndSortItems()
+	print("dropping bad items")
+		
+	for i=1, 16 do
+		turtle.select(i)
+		local data = turtle.getItemDetail()
+		
+		if data then
+			if badBlocks[data.name] then
+				turtle.drop()
+			else
+				for ii=1, i do
+					if turtle.transferTo(ii) then
+						break
+					end
+				end
+			end
+		end
+	end
+end
+
 function emptyInventory(force)
 	if not force then
 		if turtle.getItemCount(16) == 0 then
 			return
 		end
 		
-		print("dropping bad items")
-		
-		for i=1, 16 do
-			turtle.select(i)
-			local data = turtle.getItemDetail()
-			
-			if data then
-				if badBlocks[data.name] then
-					turtle.drop()
-				else
-					for ii=1, i do
-						if turtle.transferTo(ii) then
-							break
-						end
-					end
-				end
-			end
-		end
+		dropAndSortItems()
 		
 		if turtle.getItemCount(16) == 0 then
 			turtle.select(1)
@@ -287,7 +291,7 @@ while currentLayer < maxHeight do
 	end
 	currentLayer = currentLayer + 3
 end
-
+dropAndSortItems()
 gotoZ(startHeight)
 emptyInventory(true)
 
