@@ -219,8 +219,6 @@ end
 startHeight = math.floor(startHeight)
 z = startHeight
 size = math.floor(size)
-maxHeight = math.floor(maxHeight)
-currentLayer = math.floor(currentLayer)
 
 if not currentLayer then
 	currentLayer = 5
@@ -229,6 +227,9 @@ end
 if not maxHeight then
 	maxHeight = startHeight - 2
 end
+
+maxHeight = math.floor(maxHeight)
+currentLayer = math.floor(currentLayer)
 
 if size % 2 ~= 0 then
 	print("Size must be multiple of 2")
