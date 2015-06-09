@@ -133,12 +133,14 @@ function emptyInventory(force)
 			turtle.select(i)
 			local data = turtle.getItemDetail()
 			
-			if badBlocks[data.name] then
-				turtle.drop()
-			else
-				for ii=1, i do
-					if turtle.transferTo(ii) then
-						break
+			if data then
+				if badBlocks[data.name] then
+					turtle.drop()
+				else
+					for ii=1, i do
+						if turtle.transferTo(ii) then
+							break
+						end
 					end
 				end
 			end
