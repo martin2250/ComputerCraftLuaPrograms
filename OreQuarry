@@ -35,6 +35,7 @@ local x, y, z = 0, 0, nil
 local direction = 0
 local maxHeight, size, startHeight = nil, nil, nil
 local badBlocks = {["minecraft:cobblestone"]=true, ["minecraft:stone"]=true, ["minecraft:dirt"]=true, ["minecraft:gravel"]=true, ["minecraft:sand"]=true, ["minecraft:bedrock"]=true}
+local currentLayer
 
 --			0				y+
 --		3	^	1		x-		x+
@@ -129,6 +130,8 @@ function emptyInventory(force)
 			return
 		end
 		
+		print("dropping bad items")
+		
 		for i=1, 16 do
 			turtle.select(i)
 			local data = turtle.getItemDetail()
@@ -147,9 +150,13 @@ function emptyInventory(force)
 		end
 		
 		if turtle.getItemCount(16) == 0 then
+			turtle.select(1)
 			return
 		end
 	end
+	
+	print("returning to the surface to drop off items")
+	
 	local oldX, oldY, oldZ, oldDir = x, y, z, direction
 	
 	turnTo(3)
@@ -195,22 +202,33 @@ function emptyInventory(force)
 end
 
 
-startHeight, size, maxHeight = ...
+startHeight, size, maxHeight, currentLayer = ...
 
 startHeight = tonumber(startHeight)
 size = tonumber(size)
 maxHeight = tonumber(maxHeight)
+currentLayer = tonumber(currentLayer)
 
-if not (startHeight and size and maxHeight) then
-	print("usage: OreQuarry [Y coordinate] [Size] [Max mining height]")
+if not (startHeight and size) then
+	print("usage: OreQuarry [Y coordinate] [Size] <Max mining height: Y-2 > <Start Height: 5>")
 	print("turtle will mine a square of [size] blocks")
 	print("place a vertical column of chests behind the turtle")
 	return
 end
 
 startHeight = math.floor(startHeight)
+z = startHeight
 size = math.floor(size)
 maxHeight = math.floor(maxHeight)
+currentLayer = math.floor(currentLayer)
+
+if not currentLayer then
+	currentLayer = 5
+end
+
+if not maxHeight then
+	maxHeight = startHeight - 2
+end
 
 if size % 2 ~= 0 then
 	print("Size must be multiple of 2")
@@ -222,11 +240,11 @@ if size < 0 or startHeight < 6 or startHeight > 255 or maxHeight < 8 or maxHeigh
 	return
 end
 
-z = startHeight
 
-local currentLayer = 5
 
 while currentLayer < maxHeight do
+	print("Mining Layer ", currentLayer)
+	
 	gotoZ(currentLayer)
 
 	while true do
