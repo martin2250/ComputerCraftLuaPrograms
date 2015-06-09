@@ -34,8 +34,18 @@ end
 local x, y, z = 0, 0, nil
 local direction = 0
 local maxHeight, size, startHeight = nil, nil, nil
-local badBlocks = {["minecraft:cobblestone"]=true, ["minecraft:stone"]=true, ["minecraft:dirt"]=true, ["minecraft:gravel"]=true, ["minecraft:sand"]=true, ["minecraft:bedrock"]=true}
+local badBlocks = {["minecraft:cobblestone"]=true, ["minecraft:stone"]=true, ["minecraft:dirt"]=true, ["minecraft:gravel"]=true, ["minecraft:sand"]=true, ["minecraft:bedrock"]=true, ["minecraft:flint"]=true}
 local currentLayer
+
+local chatBox = peripheral.find("chatbox")
+
+function say(message)
+	print(message)
+	
+	if chatBox then
+		chatBox.say(message)
+	end
+end
 
 --			0				y+
 --		3	^	1		x-		x+
@@ -73,7 +83,7 @@ function move(moveFunc, digFunc, attackFunc)
 		failCount = failCount + 1
 		
 		if failCount == 100 then
-			error("Unable to move")
+			say("Unable to move")
 		end
 	end
 end
@@ -125,7 +135,7 @@ function gotoZ(newZ)
 end
 
 function dropAndSortItems()
-	print("dropping bad items")
+	say("claning up inventory")
 		
 	for i=1, 16 do
 		turtle.select(i)
@@ -159,7 +169,7 @@ function emptyInventory(force)
 		end
 	end
 	
-	print("returning to the surface to drop off items")
+	say("returning to the surface to drop off items")
 	
 	local oldX, oldY, oldZ, oldDir = x, y, z, direction
 	
@@ -248,7 +258,7 @@ end
 
 
 while currentLayer < maxHeight do
-	print("Mining Layer ", currentLayer)
+	say("Mining Layer " .. currentLayer)
 	
 	gotoZ(currentLayer)
 
@@ -295,4 +305,4 @@ dropAndSortItems()
 gotoZ(startHeight)
 emptyInventory(true)
 
-print("Done")
+say("Done")
