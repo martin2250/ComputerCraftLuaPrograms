@@ -36,6 +36,7 @@ local direction = 0
 local maxHeight, size, startHeight = nil, nil, nil
 local badBlocks = {["minecraft:cobblestone"]=true, ["minecraft:stone"]=true, ["minecraft:dirt"]=true, ["minecraft:gravel"]=true, ["minecraft:sand"]=true, ["minecraft:bedrock"]=true, ["minecraft:flint"]=true}
 local currentLayer
+local sortInventoryStart = 1
 
 local chatBox = peripheral.find("chatbox")
 
@@ -137,7 +138,7 @@ end
 function dropAndSortItems()
 	say("claning up inventory")
 		
-	for i=1, 16 do
+	for i=sortInventoryStart, 16 do
 		turtle.select(i)
 		local data = turtle.getItemDetail()
 		
@@ -153,6 +154,13 @@ function dropAndSortItems()
 			end
 		end
 	end
+	
+	for i = sortInventoryStart, 16 do
+		if turtle.getItemCount(i) == 0 then
+			sortInventoryStart = i
+			end
+		end
+	end
 end
 
 function emptyInventory(force)
@@ -163,7 +171,7 @@ function emptyInventory(force)
 		
 		dropAndSortItems()
 		
-		if turtle.getItemCount(16) == 0 then
+		if turtle.getItemCount(15) == 0 then
 			turtle.select(1)
 			return
 		end
@@ -195,6 +203,8 @@ function emptyInventory(force)
 			end
 		end
 	end
+	
+	sortInventoryStart = 1
 	
 	turtle.select(1)
 	
