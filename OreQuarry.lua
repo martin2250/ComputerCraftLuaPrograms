@@ -158,7 +158,6 @@ function dropAndSortItems()
 	for i = sortInventoryStart, 16 do
 		if turtle.getItemCount(i) == 0 then
 			sortInventoryStart = i
-			end
 		end
 	end
 end
