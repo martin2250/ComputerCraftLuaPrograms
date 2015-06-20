@@ -43,7 +43,7 @@ function say(message)
 	print(message)
 	
 	if chatBox then
-		chatBox.say(message)
+		pcall(chatBox.say, message)	--prevent too many messages error
 	end
 end
 
