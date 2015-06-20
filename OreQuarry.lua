@@ -148,7 +148,7 @@ function dropAndSortItems()
 		
 		if data and badBlocks[data.name] then
 			fastSelect(i)
-			turtle.drop()
+			turtle.dropDown()
 		else
 			for ii=1, i do
 				local other = turtle.getItemDetail(ii)
@@ -169,9 +169,11 @@ function emptyInventory(force)
 		if turtle.getItemCount(16) == 0 then
 			return
 		end
+	end
 		
-		dropAndSortItems()
-		
+	dropAndSortItems()
+	
+	if not force then
 		if turtle.getItemCount(15) == 0 then
 			fastSelect(1)
 			return
