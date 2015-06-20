@@ -34,7 +34,21 @@ end
 local x, y, z = 0, 0, nil
 local direction = 0
 local maxHeight, size, startHeight = nil, nil, nil
-local badBlocks = {["minecraft:cobblestone"]=true, ["minecraft:stone"]=true, ["minecraft:dirt"]=true, ["minecraft:gravel"]=true, ["minecraft:sand"]=true, ["minecraft:bedrock"]=true, ["minecraft:flint"]=true}
+local badBlocks = {
+["minecraft:cobblestone"]=true,
+["minecraft:stone"]=true,
+["minecraft:dirt"]=true,
+["minecraft:gravel"]=true,
+["minecraft:sand"]=true,
+["minecraft:bedrock"]=true,
+["minecraft:flint"]=true,
+["minecraft:rotten_flesh"]=true,
+["minecraft:sandstone"]=true,
+["chisel:limestone"]=true,
+["chisel:diorite"]=true,
+["chisel:marble"]=true
+}
+
 local currentLayer
 
 local chatBox = peripheral.find("chatbox")
