@@ -70,6 +70,12 @@ function turnTo(newDirection)
 	end	
 end
 
+function fastSelect(i)
+	if turtle.getSelectedSlot() ~= i then
+		turtle.select(i)
+	end
+end
+
 function move(moveFunc, digFunc, attackFunc)
 	local failCount = 0
 	
@@ -115,12 +121,12 @@ end
 function check()
 	local success, data = turtle.inspectUp()
 	if success and not badBlocks[data.name] then
-		turtle.select(1)
+		fastSelect(1)
 		turtle.digUp()
 	end
 	success, data = turtle.inspectDown()
 	if success and not badBlocks[data.name] then
-		turtle.select(1)
+		fastSelect(1)
 		turtle.digDown()
 	end
 end
@@ -138,15 +144,18 @@ function dropAndSortItems()
 	say("claning up inventory")
 		
 	for i=1, 16 do
-		turtle.select(i)
-		local data = turtle.getItemDetail()
+		local data = turtle.getItemDetail(i)
 		
-		if data then
-			if badBlocks[data.name] then
-				turtle.drop()
-			else
-				for ii=1, i do
-					if turtle.transferTo(ii) then
+		if data and badBlocks[data.name] then
+			fastSelect(i)
+			turtle.drop()
+		else
+			for ii=1, i do
+				local other = turtle.getItemDetail(ii)
+				if not other or (other.name == data.name and turtle.getItemSpace(ii) > 0) then
+					fastSelect(i)
+					turtle.transferTo(ii)
+					if turtle.getItemCount(i) == 0 then
 						break
 					end
 				end
@@ -164,7 +173,7 @@ function emptyInventory(force)
 		dropAndSortItems()
 		
 		if turtle.getItemCount(15) == 0 then
-			turtle.select(1)
+			fastSelect(1)
 			return
 		end
 	end
@@ -189,14 +198,14 @@ function emptyInventory(force)
 	
 	for i=1, 16 do
 		if turtle.getItemCount(i) > 0 then
-			turtle.select(i)
+			fastSelect(i)
 			while not turtle.drop() do
 				up()
 			end
 		end
 	end
 	
-	turtle.select(1)
+	fastSelect(1)
 	
 	gotoZ(oldZ)
 	
